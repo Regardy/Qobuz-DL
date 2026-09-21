@@ -13,13 +13,16 @@ export async function GET(request: NextRequest) {
     try {
         const { q, offset } = searchParamsSchema.parse(params);
         const searchResults = await search(q, 10, offset, country ? { country } : {});
-        return new NextResponse(JSON.stringify({ success: true, data: searchResults }), { status: 200 });
+        
+        // Menggunakan NextResponse.json
+        return NextResponse.json({ success: true, data: searchResults }, { status: 200 });
     } catch (error: any) {
-        return new NextResponse(
-            JSON.stringify({
+        // Menggunakan NextResponse.json agar response error tetap berupa JSON yang valid
+        return NextResponse.json(
+            {
                 success: false,
                 error: error?.errors || error.message || 'An error occurred parsing the request.'
-            }),
+            },
             { status: 400 }
         );
     }
